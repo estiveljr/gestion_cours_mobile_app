@@ -5,7 +5,7 @@
             <TextField v-model="email" hint="email" keyboardType="email" />
             <TextField v-model="password" hint="password" secure="true" />
             <Button text="Login" @tap="login" />
-            <Label v-if="error" text="Invalid credentials" class="error" />
+            <!-- <Label v-if="error" text="Invalid credentials" class="error" /> -->
             <Button text="Register" @tap="register" />
         </StackLayout>
     </Page>

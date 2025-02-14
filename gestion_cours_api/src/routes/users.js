@@ -34,6 +34,7 @@ router.post('/register', [
 
 // Connexion
 router.post('/login', async (req, res) => {
+  let user;
   try {
     const { email, password } = req.body;
     const [users] = await db.execute('SELECT * FROM users WHERE email = ?', [email]);
@@ -42,17 +43,21 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
 
-    const user = users[0];
+    user = users[0];
     const isValidPassword = await bcrypt.compare(password, user.password);
     
     if (!isValidPassword) {
       return res.status(401).json({ message: 'Email ou mot de passe incorrect' });
     }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 
+  try {
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
     res.json({ token });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: "impossible de générer le token", message: error.message });
   }
 });
 
