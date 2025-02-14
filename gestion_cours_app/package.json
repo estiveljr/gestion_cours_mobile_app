@@ -1,0 +1,31 @@
+{
+  "name": "mon_projet",
+  "main": "app/app.js",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@nativescript/core": "~8.8.0",
+    "@nativescript/theme": "^3.1.0",
+    "axios": "^0.18.0",
+    "follow-redirects": "^1.14.1",
+    "nativescript": "^8.8.3",
+    "nativescript-vue": "~2.9.3",
+    "node": "^22.9.0",
+    "ns": "^1.0.2"
+  },
+  "devDependencies": {
+    "@nativescript/android": "^8.8.6",
+    "@nativescript/preview-cli": "1.0.14",
+    "@nativescript/webpack": "~5.0.0",
+    "assert": "^2.1.0",
+    "buffer": "^6.0.3",
+    "https-browserify": "^1.0.0",
+    "nativescript-vue-template-compiler": "~2.9.3",
+    "os-browserify": "^0.3.0",
+    "process": "^0.11.10",
+    "stream-browserify": "^3.0.0",
+    "stream-http": "^3.2.0",
+    "tty-browserify": "^0.0.1",
+    "url": "^0.11.4"
+  }
+}

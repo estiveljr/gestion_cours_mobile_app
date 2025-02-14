@@ -1,0 +1,22 @@
+développez une API sur le framework Express.js
+Vous devez faire Une API pour créer et gérer une liste de courses.
+
+- Concevoir et créer le schéma relationnel de la base de données.
+- Créer le script.sql qui permet de créer la structure de la base de
+données.
+- Développer l’API qui qui permet de:
+- Créer un compte utilisateur avec mot de passe enregistré de
+façon sécuritaire
+- Se connecter au compte
+- Supprimer un compte
+- Modifier les informations au compte
+- Inclure les fonctionnalités du projets sélectionné
+
+Livrables:
+- Schéma relationnel de la base de données
+- Documentation des “endpoints” de l’API
+- l’API doit include les 4 types de requêtes GET POST PUT DELETE
+- La base de données MySQL
+- Le script permetant de créer la structure de la base de données
+- Le projet express.js
+- Fichier readme
