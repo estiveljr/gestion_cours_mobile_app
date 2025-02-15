@@ -2,34 +2,28 @@
     <Page>
         <ActionBar title="Course List" />
         <StackLayout>
-            <!-- <Label v-if="error" text="Error loading courses" class="error" /> -->
+            <Button text="Add Course" @tap="addCourse" />
+            <Button text="Logout" @tap="logout()" />
+            <Label v-if="error" text="Error loading courses" class="error" />
             <Label :text="this.error" row="0" col="0" backgroundColor="#777777" color="#ffffff" />
             <ListView for="course in courses" @itemTap="">
                 <v-template>
-                    <GridLayout columns="*" rows="*, *, *, *, *, *, *">
+                    <GridLayout columns="*" rows="*, *, *, *, *, *">
                         <Label :text="course.course_code" row="0" col="0" backgroundColor="#43B344" />
                         <Label :text="course.course_name" row="1" col="0" backgroundColor="#777777" color="#ffffff" />
                         <Label :text="course.credits" row="2" col="0" backgroundColor="#777777" color="#ffffff" />
                         <Label :text="course.semester" row="3" col="0" backgroundColor="#777777" color="#ffffff" />
                         <Label :text="course.description" row="4" col="0" backgroundColor="#777777" color="#ffffff" />
                         <GridLayout columns="*,*" rows="*" row="5" col="0">
-                            <!-- <Button backgroundColor="#00ff00" color="#ffffff" row="0" col="0" text="Modify"
-                                @tap="modifyCourse(course.course_id)" /> -->
                             <Button backgroundColor="#777777" color="#ffffff" row="0" col="0" text="Modify"
                                 @tap="modifyCourse(course)" />
                             <Button backgroundColor="#777777" color="#ffffff" row="0" col="1" text="Delete"
-                                @tap="deleteCourse(course.course_id)" />
+                                @tap="deleteCourse(course.id)" />
                         </GridLayout>
                     </GridLayout>
                 </v-template>
             </ListView>
-            <!-- <TextField v-model="newCourseCode" hint="New Course Code" />
-            <TextField v-model="newCourseName" hint="New Course Name" />
-            <TextField v-model="newCourseCredits" hint="New Course Credits" />
-            <TextField v-model="newCourseSemester" hint="New Course Semester" />
-            <TextField v-model="newCourseDescription" hint="New Course Description" /> -->
-            <Button text="Add Course" @tap="addCourse" />
-            <Button text="Logout" @tap="logout()" />
+            
         </StackLayout>
     </Page>
 </template>
@@ -43,11 +37,6 @@ export default {
         return {
             apiHost: "192.168.20.40",
             courses: [],
-            newCourseCode: '',
-            newCourseName: '',
-            newCourseCredits: '',
-            newCourseSemester: '',
-            newCourseDescription: '',
             error: null,
             token: ""
         };
@@ -65,29 +54,14 @@ export default {
     methods: {
         async addCourse() {
             try {
-                let config = {
-                    method: 'post',
-                    url: `http://${this.apiHost}:3000/api/add-course`,
-                    headers: {
-                        'Authorization': 'Bearer ' + this.token
-                    },
-                    data: {
-                        course_code: this.newCourseCode,
-                        course_name: this.newCourseName,
-                        credits: this.newCourseCredits,
-                        semester: this.newCourseSemester,
-                        description: this.newCourseDescription
+                this.$navigateTo(EditCourse, {
+                    props: {
+                        newCourse: true
                     }
-                };
-                const response = await axios.request(config);
-                this.getCourses();
-                this.newCourseCode = '';
-                this.newCourseName = '';
-                this.newCourseCredits = '';
-                this.newCourseSemester = '';
-                this.newCourseDescription = '';
+                });
             } catch (error) {
                 this.error = 'Failed to add course';
+                console.log(this.error);
             }
         },
         async getCourses() {
@@ -108,34 +82,40 @@ export default {
             try {
                 let config = {
                     method: 'delete',
-                    url: `http://${this.apiHost}:3000/api/course`,
+                    url: `http://${this.apiHost}:3000/api/courses/${id}`,
                     headers: {
                         'Authorization': 'Bearer ' + this.token
                     },
-                    data: { course_id: id }
+                    data: []
                 };
                 const response = await axios.request(config);
-                this.courses = this.courses.filter((course) => course.course_id !== id);
+                console.log(response);
+                this.courses = this.courses.filter((course) => course.id !== id);
+                alert("Course deleted successfully");
             } catch (error) {
                 this.error = 'Failed to delete course';
+                console.error(this.error);
+                console.error(error);
+                alert({
+                    title: 'Failed to delete course',
+                    message: error.response.data.message,
+                    okButtonText: 'OK'
+                });
             }
         },
         async modifyCourse(course) {
-            this.$navigateTo(EditCourse, {
-                context: {
-                    course: course
-                }
-            });
             try {
-                this.$navigateTo(EditCourse, {
-                    context: {
-                        course: course
+                console.log('Navigating to edit course:');
+                console.log(course);
+                await this.$navigateTo(EditCourse, {
+                    props: {
+                        course: course,
                     }
                 });
             } catch (error) {
                 this.error = 'Failed to modify course';
-                console.log(this.error);
-                console.log(error)
+                console.error('Navigation error:', error);
+                alert("Failed to modify course");
             }
         },
         logout() {
@@ -143,5 +123,18 @@ export default {
             this.$navigateTo(Login);
         }
     },
+    // watch: {
+    //     error: {
+    //         handler(newValue) {
+    //             if (newValue?.length > 0) {
+    //                 alert({
+    //                     title: 'Error',
+    //                     message: newValue,
+    //                     okButtonText: 'OK'
+    //                 })
+    //             }
+    //         }
+    //     }
+    // }
 };
 </script>

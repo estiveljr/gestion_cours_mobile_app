@@ -110,7 +110,7 @@ router.put('/update-course/:id', auth, [
     body('course_name').optional().trim().notEmpty().escape(),
     body('credits').optional().isInt({ min: 1 }),
     body('semester').optional().trim().notEmpty().escape(),
-    body('description').optional().trim().escape()
+    body('description').optional().trim().escape(),
 ], async (req, res) => {
     try {
         const errors = validationResult(req);
@@ -118,7 +118,7 @@ router.put('/update-course/:id', auth, [
             return res.status(400).json({ errors: errors.array() });
         }
 
-        const { course_code, course_name, credits, semester, description } = req.body;
+        const { course_code, course_name, credits, semester, description} = req.body;
         const updates = [];
         const values = [];
 
